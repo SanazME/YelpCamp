@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>YelpCamp</title>
+    <!-- Boostrap 3.3.5 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- our custom CSS -->
+    <link rel="stylesheet" href="/stylesheets/landing.css">
+
+    <!-- Modernizr package to test for cross-browser compatibility -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js" type="text/javascript"
+        async></script>
+
+    <!-- to get retro camera glyphicon from fontawsome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <% if (error && error.length > 0) {%>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+        <% } %>
+        <% if (success && success.length > 0) {%>
+        <div class="alert alert-success" role="alert">
+            <%= success %>
+        </div>
+        <% } %>
+    </div>
+
+    <div id="landing-header">
+        <h1><i class="fas fa-campground"></i> Welcome To YelpCamp!</h1>
+        <a href="/campgrounds" class="btn btn-lg btn-primary">View All Campgrounds</a>
+    </div>
+
+    <ul class="slideshow">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+</body>
+
+<% include partials/footer %>
