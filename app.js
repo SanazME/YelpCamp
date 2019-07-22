@@ -60,7 +60,7 @@ app.use("/campgrounds/:id/comments",commentRoutes);
 
 // Connect to the MongoDB , first download dotenv from npm
 require('dotenv').config();
-mongoose.connect(process.env.url, {
+mongoose.connect(process.env.DATABASEURL, {
     useNewUrlParser: true,
     useCreateIndex: true
 }).then(() => {
