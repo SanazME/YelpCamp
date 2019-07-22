@@ -16,7 +16,15 @@ var compgroundRoutes   = require('./routes/campgrounds'),
     indexRoutes        = require('./routes/index'); //auth routed 
 
 var url = process.env.DATABASEURL; //|| "mongodb+srv://devsanaz:devsanaz@clusterawesome-86bge.mongodb.net/test?retryWrites=true&w=majority"
-mongoose.connect(url);
+console.log("Environemnt Varirable:",url);
+mongoose.connect(url, {
+    useNewUrlParser : true,
+    useCreateIndex : true
+}).then(()=>{
+    console.log("Connected to DB ....")
+}).catch(err=>{
+    console.log("Error : ", err)
+});
 
 var port = process.env.PORT || 3000;
 
