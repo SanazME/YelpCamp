@@ -15,6 +15,8 @@ var compgroundRoutes   = require('./routes/campgrounds'),
     commentRoutes      = require('./routes/comments'),
     indexRoutes        = require('./routes/index'); //auth routed 
 
+var url = process.env.DATABASEURL || "mongodb+srv://devsanaz:devsanaz@clusterawesome-86bge.mongodb.net/test?retryWrites=true&w=majority"
+mongoose.connect(url);
 
 var port = process.env.PORT || 3000;
 
@@ -59,15 +61,15 @@ app.use("/campgrounds",compgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
 
 // Connect to the MongoDB , first download dotenv from npm
-require('dotenv').config();
-mongoose.connect(process.env.DATABASEURL, {
-    useNewUrlParser: true,
-    useCreateIndex: true
-}).then(() => {
-    console.log('Connected to DB!');
-}).catch(err => {
-    console.log('Error : ', err.message);
-});
+// require('dotenv').config();
+// mongoose.connect(process.env.DATABASEURL, {
+//     useNewUrlParser: true,
+//     useCreateIndex: true
+// }).then(() => {
+//     console.log('Connected to DB!');
+// }).catch(err => {
+//     console.log('Error : ', err.message);
+// });
 
 
 app.listen(port, () => {
