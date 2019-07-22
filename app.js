@@ -15,7 +15,7 @@ var compgroundRoutes   = require('./routes/campgrounds'),
     commentRoutes      = require('./routes/comments'),
     indexRoutes        = require('./routes/index'); //auth routed 
 
-var url = process.env.DATABASEURL || "mongodb+srv://devsanaz:devsanaz@clusterawesome-86bge.mongodb.net/test?retryWrites=true&w=majority"
+var url = process.env.DATABASEURL; //|| "mongodb+srv://devsanaz:devsanaz@clusterawesome-86bge.mongodb.net/test?retryWrites=true&w=majority"
 mongoose.connect(url);
 
 var port = process.env.PORT || 3000;
