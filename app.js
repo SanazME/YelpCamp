@@ -15,7 +15,7 @@ var compgroundRoutes   = require('./routes/campgrounds'),
     commentRoutes      = require('./routes/comments'),
     indexRoutes        = require('./routes/index'); //auth routed 
 
-var url = process.env.DATABASEURL; //|| "mongodb://localhost/yelp_camp_v10";
+var url = process.env.DATABASEURL; //|| "mongodb://localhost/yelp_camp_v10"; // fallback in case global var not working
 console.log("Environemnt Varirable:",url);
 mongoose.connect(url, {
     useNewUrlParser : true,
