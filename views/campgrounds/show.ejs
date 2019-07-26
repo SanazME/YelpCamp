@@ -86,6 +86,17 @@
             position : center,
             map : map,
             icon : img
+        });
+        
+        // Content for display in InfoWindow
+        contentString = `
+        <strong><% campground.name %></strong>
+        <p><>%= campground.description %</p>
+        `
+        
+        // InfoWindow for marker
+        var infoWindow = new google.maps.InfoWindow({
+            content : contentString,
         })
     }
 </script>
