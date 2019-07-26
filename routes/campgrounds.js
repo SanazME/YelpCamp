@@ -34,9 +34,10 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     var price = req.body.price;
     var image = req.body.image;
     var descrip = req.body.description;
+    var location = req.body.location;
     // Add username and id to the newly created campground
     var author = { id: req.user._id, username: req.user.username };
-    var newCampground = { name: name, price: price, image: image, description: descrip, author: author };
+    var newCampground = { name: name, price: price, image: image, location:location, description: descrip, author: author };
     console.log("The user is", req.user);
 
     // Adding to DB
