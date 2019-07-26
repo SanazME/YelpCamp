@@ -7,8 +7,9 @@
             <p class="lead">YelpCamp</p>
             <div class="list-group">
                 <li class="list-group-item active">Info 1</li>
-                <li class="list-group-item">Info 1</li>
-                <li class="list-group-item">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+                <div id="map"></div>
             </div>
         </div>
         <!-- image -->
@@ -24,10 +25,10 @@
                     </p>
 
                     <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
-                        <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
-                        <form class="delete-form" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
+                    <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                    <form class="delete-form" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
                     <% } %>
                     <a href="/campgrounds" type="button" class="btn btn-info">Back</a>
                 </div>
@@ -48,10 +49,13 @@
                             <%= comment.text %>
                         </p>
                         <% if (currentUser && comment.author.id.equals(currentUser._id)) { %>
-                            <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
-                            <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id%>?_method=DELETE" method="POST">
-                                <button class="btn btn-danger">Delete</button>
-                            </form>
+                        <a class="btn btn-warning"
+                            href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                        <form class="delete-form"
+                            action="/campgrounds/<%= campground._id %>/comments/<%= comment._id%>?_method=DELETE"
+                            method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
                         <% } %>
                     </div>
                 </div>
@@ -60,5 +64,29 @@
         </div>
     </div>
 </div>
+<!-- Google Map API -->
+<script>
+    function initMap(){
+        // Get latitude and longitude of campground
+        var lat = <%= campground.lat %>;
+        var lng = <%= campground.lng %>;
+        var center = {lat:lat, lng:lng};
+
+        // The map positioned at campground location
+        var options = {
+            zoom : 8,
+            center : center
+        }
+        var map = new google.maps.Map(document.getElementById("map"), options);
+
+        // The marker positioned at campground center in the map
+        var marker = google.maps.Marker({
+            position : center,
+            map : map
+        })
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyYD4G_d2_YIARHNJpStHnBso4BZuZBVE&callback=initMap"></script>
 
 <% include ../partials/footer %>
+

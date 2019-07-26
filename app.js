@@ -1,3 +1,5 @@
+// require('dotenv').config();
+
 var express       = require('express'),
     app           = express(),
     mongoose      = require('mongoose'),
@@ -69,7 +71,7 @@ app.use("/campgrounds",compgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
 
 // Connect to the MongoDB , first download dotenv from npm
-// require('dotenv').config();
+
 // mongoose.connect(process.env.DATABASEURL, {
 //     useNewUrlParser: true,
 //     useCreateIndex: true
