@@ -98,6 +98,11 @@
         var infoWindow = new google.maps.InfoWindow({
             content : contentString,
         })
+
+        // Add a listener to the marker
+        marker.addListener('click', function(){
+            infoWindow.open(map, marker);
+        });
     }
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyYD4G_d2_YIARHNJpStHnBso4BZuZBVE&callback=initMap"></script>
