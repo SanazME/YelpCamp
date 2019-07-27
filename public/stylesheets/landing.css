@@ -44,19 +44,19 @@ body{
 }
 .slideshow li:nth-child(2){
     background-image: url("../img/landingIMG2.jpg");
-    animation-delay : 5s;
+    animation-delay : 3s;
 }
 .slideshow li:nth-child(3){
     background-image: url("../img/landingIMG3.jpg");
-    animation-delay: 10s;
+    animation-delay: 8s;
 }
 .slideshow li:nth-child(4){
     background-image: url("../img/landingIMG4.jpg");
-    animation-delay: 20s;
+    animation-delay: 18s;
 }
 .slideshow li:nth-child(5){
     background-image: url("../img/landingIMG5.jpg");
-    animation-delay: 30s;
+    animation-delay: 28s;
 }
 
 @keyframes imageAnimation{
