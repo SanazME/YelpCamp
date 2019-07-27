@@ -81,11 +81,10 @@
         var map = new google.maps.Map(document.getElementById("map"), options);
 
         // The marker positioned at campground center in the map
-        var img = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
         var marker = new google.maps.Marker({
             position : center,
             map : map,
-            icon : img
+            icon : 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
         });
         
         // Content for display in InfoWindow
@@ -105,7 +104,7 @@
         });
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyYD4G_d2_YIARHNJpStHnBso4BZuZBVE&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YELPCAMP_API_KEY&callback=initMap"></script>
 
 <% include ../partials/footer %>
 
