@@ -12,10 +12,12 @@ var express       = require('express'),
     Campground    = require('./models/campground'),
     Comment       = require('./models/comment'),
     User          = require('./models/user'),
+    Review        = require('./models/review'),
     seedDB        = require('./seeds');
 
 var compgroundRoutes   = require('./routes/campgrounds'),
     commentRoutes      = require('./routes/comments'),
+    reviewRoutes       = require('./routes/reviews'),
     indexRoutes        = require('./routes/index'); //auth routed 
 
 var url = process.env.DATABASEURL; //|| "mongodb://localhost/yelp_camp_v10"; // fallback in case global var not working
@@ -70,6 +72,7 @@ app.use((req, res, next)=>{
 app.use("/",indexRoutes);
 app.use("/campgrounds",compgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
+app.use("/campgrounds/:id/reviews",reviewRoutes);
 
 // Connect to the MongoDB , first download dotenv from npm
 
