@@ -89,6 +89,17 @@ middlewareObj.isLoggedIn = (req, res, next)=>{
 // }
 
 
+// check if the existing user has a review
+middlewareObj.checkReviewExistence = (req, res, next)=>{
+    if (req.isAuthenticated()){
+        
+
+    }
+    req.flash("error", "You need to be logged in");
+    res.redirect("back");
+
+}
+
 
 // middlewareObj is an object we define
 module.exports = middlewareObj;

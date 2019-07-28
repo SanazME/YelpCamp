@@ -23,7 +23,7 @@ var campgroundSchema = new mongoose.Schema({
         }
     ],
     // reference to reviews for campground
-    review: [
+    reviews: [
        {
            type : mongoose.Schema.Types.ObjectId,
            ref : "Review"

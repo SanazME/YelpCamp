@@ -39,7 +39,7 @@ var reviewSchema = new mongoose.Schema({
 
     // campground associated with the review
     campground: {
-        id: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Campground"
     }
 }, {
@@ -48,6 +48,6 @@ var reviewSchema = new mongoose.Schema({
     });
 
 // Set timestap to true
-reviewSchema.set(timestamps, true);
+// reviewSchema.set(timestamps, true);
 
 module.exports = mongoose.model("Review", reviewSchema);
