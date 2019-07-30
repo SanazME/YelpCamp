@@ -8,11 +8,11 @@ var middleware = require('../middleware');
 router.get('/new', middleware.isLoggedIn, (req, res) => {
     // Find campground by Id
     console.log(req.params.id);
-    Campground.findById(req.params.id, (err, foundComment) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             console.log(err);
         } else {
-            res.render('comments/new', { campground: foundComment });
+            res.render('comments/new', { campground: foundCampground });
         };
     });
 });
@@ -25,7 +25,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     // redirect to campground showpage
 
     // lookup camground using Id
-    Campground.findById(req.params.id, (err, foundComment) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             console.log(err);
             res.redirect('/campgrounds');
@@ -46,10 +46,10 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
                     createdComment.save();
                     console.log(createdComment);
                     // console.log(req.body.comment);
-                    foundComment.comments.push(createdComment);
-                    foundComment.save();
+                    foundCampground.comments.push(createdComment);
+                    foundCampground.save();
                     req.flash("success", "Created comment successfully")
-                    res.redirect('/campgrounds/' + foundComment._id);
+                    res.redirect('/campgrounds/' + foundCampground._id);
                 }
             });
         }
