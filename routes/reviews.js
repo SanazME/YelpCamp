@@ -6,6 +6,7 @@ var middleware = require('../middleware');
 
 // review Index
 router.get('/', (req, res) => {
+    // console.log("review Index route")
     Campground.findById(req.params.id).populate({
         path: "reviews",
         options: { sort: { createdAt: -1 }, limit: 5 }
@@ -31,9 +32,10 @@ router.get('/new', middleware.isLoggedIn, middleware.checkReviewExistence, (req,
         }
         res.render('reviews/new', { campground: foundCampground });
     })
+    // console.log("Add new Review!")
 })
 
-// review CREATE 
+// // review CREATE 
 router.post('/', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (req, res) => {
     // lookup campground by id
     // create new review
@@ -83,19 +85,20 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, (req, res) => {
         };
         res.render('/reviews/edit', { review: foundReview, camground_id: req.params.id });
     })
+    // res.send("Edit REview!")
 })
 
-// review Update route
+// // review Update route
 router.put('/:review_id', middleware.checkReviewOwnership, (req, res) => {
 
-    Review.findByIdAndUpdate(req.params.review_id, req.body.review,{new : true}, (err, updatedReview) => {
+    Review.findByIdAndUpdate(req.params.review_id, req.body.review, { new: true }, (err, updatedReview) => {
         if (err) {
             req.flash("error", err.message);
             return res.redirect('back');
-        } 
+        }
         // find the campground and update reviews and average rating
-        Campground.findById(req.params.id).populate("reviews").exec((err, foundCampground)=>{
-            if (err){
+        Campground.findById(req.params.id).populate("reviews").exec((err, foundCampground) => {
+            if (err) {
                 req.flash("error", err.message);
                 return res.redirect("back");
             }
@@ -110,6 +113,30 @@ router.put('/:review_id', middleware.checkReviewOwnership, (req, res) => {
     })
 })
 
+router.delete('/:review_id', middleware.checkCommentOwnership, (req, res) => {
+
+    Review.findByIdAndDelete(req.params.review_id, (err, deletedReview) => {
+        if (err) {
+            req.flash("error", err.message);
+            return res.redirect('back');
+        }
+        // Update campground average rating
+        console.log("deleted Review id: " + deletedReview._id);
+
+        Campground.findByIdAndUpdate(req.params.id, { $pull: { reviews: deletedReview._id } }, { new: true }).populate("reviews").exec((err, updatedCampground) => {
+            if (err) {
+                req.flash("error", err.message);
+                return res.redirect("back");
+            }
+            // Update average rating
+            foundCampground.rating = calculateAverageRating(foundCampground.reviews);
+            foundCampground.save();
+
+            req.flash("success", "Review is deleted successfully!");
+            return res.redirect('campground/' + foundCampground._id);
+        })
+    })
+});
 
 
 function calculateAverageRating(reviews) {
@@ -122,8 +149,6 @@ function calculateAverageRating(reviews) {
     });
     return totReview / reviews.length;
 }
-
-
 
 
 

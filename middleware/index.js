@@ -1,5 +1,6 @@
 var Campground = require('../models/campground'),
-    Comment = require('../models/comment')
+    Comment = require('../models/comment'),
+    Review = require('../models/review')
 
 
 
@@ -8,7 +9,7 @@ var Campground = require('../models/campground'),
 // all the middleware goes here
 var middlewareObj = {};
 
-middlewareObj.checkCampgroundOwnership = (req, res, next)=>{
+middlewareObj.checkCampgroundOwnership = (req, res, next) => {
     // is user logged in?
     // does user own the campground?
     // otherwise redirect
@@ -36,7 +37,7 @@ middlewareObj.checkCampgroundOwnership = (req, res, next)=>{
     }
 }
 
-middlewareObj.checkCommentOwnership = (req,res,next)=>{
+middlewareObj.checkCommentOwnership = (req, res, next) => {
     // is user logged in?
     // does user own the comment?
     // otherwise redirect
@@ -65,7 +66,7 @@ middlewareObj.checkCommentOwnership = (req,res,next)=>{
     }
 }
 
-middlewareObj.isLoggedIn = (req, res, next)=>{
+middlewareObj.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next()
     }
@@ -90,14 +91,55 @@ middlewareObj.isLoggedIn = (req, res, next)=>{
 
 
 // check if the existing user has a review
-middlewareObj.checkReviewExistence = (req, res, next)=>{
-    if (req.isAuthenticated()){
-        
+middlewareObj.checkReviewExistence = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        // find the review
+        Campground.findById(req.params.id).populate("reviews").exec((err, foundCampground) => {
+            if (err || !foundCampground) {
+                req.flash("error", "Campground not found!");
+                return res.redirect("back");
+            } else {
+                // check if req.user._id exists in foundCampground.reviews
+                var foundUserReview = foundCampground.reviews.some(function (review) {
+                    return review.author.id.equals(req.user._id);
+                });
 
+                if (foundUserReview) {
+                    req.flash("error", "User has already reviewed this campground!");
+                    return res.redirect('campground/' + foundCampground._id);
+                } else {
+                    return next();
+                }
+            }
+        })
+    } else {
+        req.flash("error", "You need to be logged in");
+        res.redirect("back");
     }
-    req.flash("error", "You need to be logged in");
-    res.redirect("back");
+};
 
+// check if the user has the ownership of the review
+middlewareObj.checkReviewOwnership = (req, res, next) => {
+
+    if (req.isAuthenticated()) {
+        // find the review
+        Review.findById(req.params.review_id, (err, foundReview)=>{
+            if (err || !foundReview){
+                req.flash("error", "Review not found!");
+                return res.redirect("back");
+            }
+            // check if the user is the owner of review
+            if (foundReview.author.id.equals(req.user._id)){
+                next();
+            } else {
+                req.flash("error", "You don't have permission!");
+                res.redirect("back");
+            }
+        });
+    } else {
+        req.flash("error", "You need to be logged in");
+        res.redirect("back");
+    }
 }
 
 

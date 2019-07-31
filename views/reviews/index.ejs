@@ -1,0 +1,34 @@
+<% include ../partials/header %>
+
+
+
+
+
+
+<div>
+
+    <hr>
+    <% campground.reviews.forEach(review=>{ %>
+    <div class="row">
+        <div class="col-md-12">
+            <h1><%= review.campground.name%></h1>
+            <strong><%= review.author.username %></strong>
+            <p><%= review.text %></p>
+            <p><%= review.campground.rating%></p>
+        </div>
+
+    </div>
+    <% }) %>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% include ../partials/footer %>
