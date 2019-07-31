@@ -4,6 +4,7 @@ var Campground = require('../models/campground');
 var Comment = require('../models/comment');
 var middleware = require('../middleware');
 var NodeGeocoder = require('node-geocoder');
+var Review = require('../models/review');
 
 var options = {
     provider: 'google',
@@ -139,24 +140,31 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res, next) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         if (err) {
             res.redirect("/campgrounds");
-        }
-        Comment.deleteMany({
-            _id: { $in: foundCampground.comments }
-        }, (err) => {
-            if (err) return next(err);
-            foundCampground.remove();
-            // req.flash('success', 'Campground deleted successfully!');
-            res.redirect("/campgrounds");
-        })
-    })
+        } else {
 
-    // Campground.findByIdAndRemove(req.params.id, (err, deletedCampground) => {
-    //     if (err) {
-    //         res.redirect("/campgrounds");
-    //     } else {
-    //         res.redirect("/campgrounds");
-    //     }
-    // })
-})
+            // delete all comment associated with the campground
+            Comment.deleteMany({ _id: { $in: foundCampground.comments } }, (err) => {
+                if (err) {
+                    console.log(err);
+                    return res.redirect('/campgrounds')
+                };
+
+                // Delete all reviews associated with the campground
+                Review.deleteMany({ _id: { $in: foundCampground.reviews } }, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return res.redirect('/campgrounds');
+                    }
+
+                    // Remove campground
+                    foundCampground.remove();
+                    req.flash("sucess", "Campground was deleted successfully!");
+                    return res.redirect("/campgrounds")
+                })
+            })
+        }
+    })
+ });
+
 
 module.exports = router;

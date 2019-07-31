@@ -108,7 +108,7 @@ router.put('/:review_id', middleware.checkReviewOwnership, (req, res) => {
             foundCampground.save();
 
             req.flash("success", "Review is updated successfully");
-            res.redirect("/campground/" + req.params.id);
+            res.redirect("/campgrounds/" + req.params.id);
         })
     })
 })
@@ -133,7 +133,7 @@ router.delete('/:review_id', middleware.checkCommentOwnership, (req, res) => {
             foundCampground.save();
 
             req.flash("success", "Review is deleted successfully!");
-            return res.redirect('campground/' + foundCampground._id);
+            return res.redirect('/campgrounds/' + foundCampground._id);
         })
     })
 });
