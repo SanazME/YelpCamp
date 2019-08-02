@@ -1,1 +1,70 @@
-<h1> Add A NEW REVIEW!</h1>
+<% include ../partials/header.ejs %>
+
+<div class="container">
+
+    <div class="row">
+
+        <h1 style="text-align: center"> Add New Review to <%= campground.name %> </h1>
+
+        <div style="width: 30%; margin:25px auto">
+            <form action="/campgrounds/<%= campground._id %>/reviews" , method="POST">
+
+                <div class="form-group">
+
+                    <label for="rating">Leave a rating :</label>
+                    <fieldset class="starability-basic form-group" id="rating">
+
+                        <div>
+                            <input type="radio" id="rating5" name="review[rating]" value="5" checked>
+                            <label for="rating5" title="5 star - Awesome">
+                                <%- '<span class="fas fa-star"></span>'.repeat(5) %>
+                            </label></br>
+                        </div>
+
+                        <div>
+                            <input type="radio" id="rating4" name="review[rating]" value="4">
+                            <label for="rating4" title="4 star - Very good">
+                                <%- '<span class="fas fa-star"></span>'.repeat(4) %>
+                            </label></br>
+                        </div>
+
+                        <div>
+                            <input type="radio" id="rating3" name="review[rating]" value="3">
+                            <label for="rating3" title="3 star - Average">
+                                <%- '<span class="fas fa-star"></span>'.repeat(3) %>
+                            </label></br>
+                        </div>
+
+                        <div>
+                            <input type="radio" id="rating2" name="review[rating]" value="2">
+                            <label for="rating2" title="2 star - Not good">
+                                <%- '<span class="fas fa-star"></span>'.repeat(2) %>
+                            </label></br>
+                        </div>
+
+                        <div>
+                            <input type="radio" id="rating1" name="review[rating]" value="1">
+                            <label for="rating1" title="1 star - Terrible">
+                                <%- '<span class="fas fa-star"></span>'.repeat(1) %>
+                            </label></br>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="form-group">
+                    <textarea name="review[text]" type="text" cols="35" rows="5"
+                        placeholder="Write a review for this campground ..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block" style="width: 50%">Submit</button>
+                </div>
+            </form>
+
+            <a href="/campgrounds">Go Back</a>
+        </div>
+
+    </div>
+
+</div>
+
+<% include ../partials/footer.ejs %>

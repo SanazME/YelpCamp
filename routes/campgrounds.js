@@ -39,7 +39,7 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 // following REST convention, use the same name /campgrounds for POST (creating a campground)
 router.post('/', middleware.isLoggedIn, (req, res) => {
     // get data from form and add to campgrounds array
-    // console.log(req.body);
+    console.log(req.body);
     var name = req.body.name;
     var price = req.body.price;
     var image = req.body.image;

@@ -14,7 +14,7 @@ var reviewSchema = new mongoose.Schema({
         validate: [
             {
                 validator: function (val) {
-                    return val.isInteger();
+                    return val.isInteger;
                 },
                 msg: 'Oh! {PATH} is not an integer!'
             },

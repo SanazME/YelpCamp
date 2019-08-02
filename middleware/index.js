@@ -103,10 +103,11 @@ middlewareObj.checkReviewExistence = (req, res, next) => {
                 var foundUserReview = foundCampground.reviews.some(function (review) {
                     return review.author.id.equals(req.user._id);
                 });
-
+                console.log("from middleware.checkReviewExistence : foundUserReview", foundUserReview)
                 if (foundUserReview) {
+                    console.log("The user has already reviewed!!!!")
                     req.flash("error", "User has already reviewed this campground!");
-                    return res.redirect('campground/' + foundCampground._id);
+                    return res.redirect("/campgrounds/"+foundCampground._id);
                 } else {
                     return next();
                 }
@@ -120,7 +121,7 @@ middlewareObj.checkReviewExistence = (req, res, next) => {
 
 // check if the user has the ownership of the review
 middlewareObj.checkReviewOwnership = (req, res, next) => {
-
+    console.log("from middleware.checkReviewOwnership :", req.params)
     if (req.isAuthenticated()) {
         // find the review
         Review.findById(req.params.review_id, (err, foundReview)=>{

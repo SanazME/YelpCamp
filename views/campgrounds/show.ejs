@@ -19,6 +19,9 @@
                 <div class="caption">
                     <h4 class="pull-right">$<%= campground.price %>/night</h4>
                     <h4><a href=""> <%= campground.name %></a></h4>
+                    <p>
+                        <%- '<span class="fas fa-star" style="color: #FFDD33"></span>'.repeat(campground.rating) %>                                        
+                    </p>
                     <p><%= campground.description %></p>
                     <p>
                         <em>Submitted By <%= campground.author.username %></em>
@@ -33,6 +36,20 @@
                     <a href="/campgrounds" type="button" class="btn btn-info">Back</a>
                 </div>
             </div>
+            <!-- Reviews section -->
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-primary" href="/campgrounds/<%= campground._id %>/reviews/new">
+                        Add New Review
+                    </a>
+                </div>
+                <hr>
+                <% campground.reviews.forEach(review=>{ %>
+                    <p><%= review.rating %></p>
+                    
+                <% }) %>
+            </div>   
+
             <!-- Comments sections -->
             <div class="well">
                 <div class="text-right">

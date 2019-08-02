@@ -16,8 +16,9 @@ router.get('/', (req, res) => {
             req.flash("error", "Campground not found!")
             return res.redirect("back");
         }
-
+        console.log("campground passed to reviews/index page : ", foundCampground)
         res.render("reviews/index", { campground: foundCampground });
+        // res.send("Review section")
     })
 })
 
@@ -36,11 +37,12 @@ router.get('/new', middleware.isLoggedIn, middleware.checkReviewExistence, (req,
 })
 
 // // review CREATE 
-router.post('/', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (req, res) => {
+router.post('/', middleware.isLoggedIn, middleware.checkReviewExistence, (req, res) => {
     // lookup campground by id
     // create new review
     // connect new review to campground
     // redirect to campground show page
+    console.log(req.body)
 
     Campground.findById(req.params.id).populate("reviews").exec((err, foundCampground) => {
         if (err) {
@@ -51,7 +53,7 @@ router.post('/', middleware.isLoggedIn, middleware.checkCampgroundOwnership, (re
         // create a new review
         Review.create(req.body.review, (err, createdReview) => {
             if (err) {
-                req.flash("error", "Input review not found!");
+                req.flash("error", err.message);
                 return res.redirect("/campgrounds");
             }
             // add username and id and associated campground to review
@@ -113,7 +115,8 @@ router.put('/:review_id', middleware.checkReviewOwnership, (req, res) => {
     })
 })
 
-router.delete('/:review_id', middleware.checkCommentOwnership, (req, res) => {
+// DELETE ROUTE
+router.delete('/:review_id',middleware.checkReviewOwnership, (req, res) => {
 
     Review.findByIdAndDelete(req.params.review_id, (err, deletedReview) => {
         if (err) {
@@ -123,7 +126,7 @@ router.delete('/:review_id', middleware.checkCommentOwnership, (req, res) => {
         // Update campground average rating
         console.log("deleted Review id: " + deletedReview._id);
 
-        Campground.findByIdAndUpdate(req.params.id, { $pull: { reviews: deletedReview._id } }, { new: true }).populate("reviews").exec((err, updatedCampground) => {
+        Campground.findByIdAndUpdate(req.params.id, { $pull: { reviews: deletedReview._id } }, { new: true }).populate("reviews").exec((err, foundCampground) => {
             if (err) {
                 req.flash("error", err.message);
                 return res.redirect("back");

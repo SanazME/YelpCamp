@@ -13,6 +13,7 @@ var express       = require('express'),
     Comment       = require('./models/comment'),
     User          = require('./models/user'),
     Review        = require('./models/review'),
+    ejsLint       = require('ejs-lint'),
     seedDB        = require('./seeds');
 
 var compgroundRoutes   = require('./routes/campgrounds'),
