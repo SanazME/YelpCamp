@@ -22,6 +22,10 @@
                 <img src="<%= campground.image %>" alt="">
                 <div class="caption">
                     <h4><%= campground.name %></h4>
+                    <p>
+                        <%- '<span class="far fa-star star-style star-filled" ></span>'.repeat(campground.rating) %><%- '<span class="far fa-star star-style" ></span>'.repeat(5-campground.rating) %>
+                    </p>
+
                 </div>
                 <p>
                     <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
