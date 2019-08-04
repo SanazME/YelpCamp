@@ -20,7 +20,18 @@
                     <h4 class="pull-right">$<%= campground.price %>/night</h4>
                     <h4><a href=""> <%= campground.name %></a></h4>
                     <p>
-                        <%- '<span class="fas fa-star" style="color: #FFDD33"></span>'.repeat(campground.rating) %>                                        
+                        <!-- <%- '<span class="fas fa-star star-style"></span>'.repeat(campground.rating) %>
+                        <%- '<span class="far fa-star star-style"></span>'.repeat(5-campground.rating) %> -->
+                        <span
+                            class="far fa-star star-style <% if (campground.rating > 0.5) { %> star-filled <% } %>"></span>
+                        <span
+                            class="far fa-star star-style <% if (campground.rating > 1.5) { %> star-filled <% } %>"></span>
+                        <span
+                            class="far fa-star star-style <% if (campground.rating > 2.5) { %> star-filled <% } %>"></span>
+                        <span
+                            class="far fa-star star-style <% if (campground.rating > 3.5) { %> star-filled <% } %>"></span>
+                        <span
+                            class="far fa-star star-style <% if (campground.rating > 4.5) { %> star-filled <% } %>"></span>
                     </p>
                     <p><%= campground.description %></p>
                     <p>
@@ -45,10 +56,10 @@
                 </div>
                 <hr>
                 <% campground.reviews.forEach(review=>{ %>
-                    <p><%= review.rating %></p>
-                    
+                <p><%= review.rating %></p>
+
                 <% }) %>
-            </div>   
+            </div>
 
             <!-- Comments sections -->
             <div class="well">
@@ -83,40 +94,40 @@
 </div>
 <!-- Google Map API -->
 <script>
-    function initMap(){
+    function initMap() {
         // Get latitude and longitude of campground
         var lat = <%= campground.lat %>;
         var lng = <%= campground.lng %>;
-        var center = {lat:lat, lng:lng};
+        var center = { lat: lat, lng: lng };
         // var center = {lat : 42.3601, lng:-71.0589}
         // New map
         var options = {
-            zoom : 8,
-            center : center
+            zoom: 8,
+            center: center
         }
         // The map positioned at campground location
         var map = new google.maps.Map(document.getElementById("map"), options);
 
         // The marker positioned at campground center in the map
         var marker = new google.maps.Marker({
-            position : center,
-            map : map,
-            icon : 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+            position: center,
+            map: map,
+            icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
         });
-        
+
         // Content for display in InfoWindow
         contentString = `
         <strong><%= campground.name %></strong>
         <p><%= campground.description %></p>
         `
-        
+
         // InfoWindow for marker
         var infoWindow = new google.maps.InfoWindow({
-            content : contentString,
+            content: contentString,
         })
 
         // Add a listener to the marker
-        marker.addListener('click', function(){
+        marker.addListener('click', function () {
             infoWindow.open(map, marker);
         });
     }
@@ -124,4 +135,3 @@
 <script async defer src="<%= process.env.GOOGLEMAP_API_URL%>"></script>
 
 <% include ../partials/footer %>
-

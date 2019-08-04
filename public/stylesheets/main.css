@@ -14,3 +14,12 @@
     height: 400px;
     width: 100%;
 }
+
+.star-style{
+    color: #FFDD33;
+    font-weight: 200;
+}
+
+.star-filled{
+    font-weight: 900;
+}

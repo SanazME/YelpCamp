@@ -85,7 +85,7 @@ router.get('/:review_id/edit', middleware.checkReviewOwnership, (req, res) => {
             req.flash("error", err.message);
             return res.redirect("back");
         };
-        res.render('/reviews/edit', { review: foundReview, camground_id: req.params.id });
+        res.render('reviews/edit', { review: foundReview, camground_id: req.params.id });
     })
     // res.send("Edit REview!")
 })
