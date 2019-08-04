@@ -109,15 +109,6 @@
                                 All Reviews</a> </h4>
                     </div>
                     <hr>
-
-                    <div>
-                        <a class="btn btn-primary 
-                            <% if (currentUser && campground.reviews.some(function(review){ 
-                                return review.author.id.equals(currentUser._id)
-                            })){ %> disabled  <%}%>"
-                        href="/campgrounds/<%= campground._id %>/reviews/new">Add a New Review</a>
-                    </div>
-
                 </div>
             </div>
 
