@@ -48,7 +48,7 @@
                 </div>
             </div>
             <!-- Reviews section -->
-            <div class="well">
+            <!-- <div class="well">
                 <div class="text-right">
                     <a class="btn btn-primary" href="/campgrounds/<%= campground._id %>/reviews/new">
                         Add New Review
@@ -59,6 +59,66 @@
                 <p><%= review.rating %></p>
 
                 <% }) %>
+            </div> -->
+
+            <!-- Reviews section -->
+            <div class="thumbnail">
+                <div class="caption-full" style="padding-left : 5px">
+
+                    <p>
+                        <span style="text-align: left">
+                            <strong>Latest Reviews:</strong>
+                        </span>
+                        <span style="float:right">
+                            <a class="btn btn-primary
+                                            <% if (currentUser && campground.reviews.some(function(review){ 
+                                                return review.author.id.equals(currentUser._id)
+                                            })){ %> disabled  <%}%>"
+                                        href="/campgrounds/<%= campground._id %>/reviews/new">Add a New Review</a>
+                        </span>
+                    </p>
+
+                    <hr style="margin-top: 0 10px; ">
+                    <% campground.reviews.slice(0,5).forEach(function(review){ %>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <%- '<span class="far fa-star star-style star-filled" ></span>'.repeat(review.rating) %><%- '<span class="far fa-star star-style" ></span>'.repeat(5-review.rating) %>
+                            <div>Review by: <strong><%= review.author.username %></strong></div>
+                            <span><em><%= review.updatedAt.toDateString() %></em></span>
+                        </div>
+                        <div class="col-md-9" style="padding: 0 25px;">
+                            <p style="text-align: justify; word-wrap: break-word;">
+                                <%= review.text %>
+                            </p>
+                            <% if (currentUser && review.author.id.equals(currentUser._id)) { %>
+                            <a class="btn btn-xs btn-warning"
+                                href="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/edit">Edit</a>
+                            <form class="delete-form"
+                                action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                method="POST">
+                                <button class="btn btn-xs btn-danger">Delete</button>
+                            </form>
+                            <% } %>
+                        </div>
+                    </div>
+                    <hr>
+                    <% }) %>
+
+                    <div style="padding: 5px;">
+                        <h4><a href="/campgrounds/<%= campground._id %>/reviews"><i class="fab fa-searchengin"></i> See
+                                All Reviews</a> </h4>
+                    </div>
+                    <hr>
+
+                    <div>
+                        <a class="btn btn-primary 
+                            <% if (currentUser && campground.reviews.some(function(review){ 
+                                return review.author.id.equals(currentUser._id)
+                            })){ %> disabled  <%}%>"
+                        href="/campgrounds/<%= campground._id %>/reviews/new">Add a New Review</a>
+                    </div>
+
+                </div>
             </div>
 
             <!-- Comments sections -->
