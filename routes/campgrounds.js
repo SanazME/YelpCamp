@@ -1,5 +1,32 @@
 var express = require("express");
 var router = express.Router();
+
+var multer = require("multer");
+var storage = multer.diskStorage({
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + '-' + file.originalname)
+  }
+});
+var fileFilter = function (req, file, cb) {
+  // Accept image files only
+  console.log('file.originalname from Multer : ' + file.originalname)
+  console.log('type of file.originalname from Multer : ' + typeof (file.originalname))
+
+  var pattern = /\.(jpg|jpeg|png|gif)$/i;
+  if (!file.originalname.match(pattern)) {
+    return cb(new Error('Only image files are allowed!'), false)
+  }
+  return cb(null, true)
+};
+var upload = multer({ storage: storage, fileFilter: fileFilter });
+
+var cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: 'dcxgrsnss',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 var middleware = require("../middleware");
@@ -40,17 +67,17 @@ router.get("/new", middleware.isLoggedIn, (req, res) => {
 
 // CREATE ROUTE
 // following REST convention, use the same name /campgrounds for POST (creating a campground)
-router.post("/", middleware.isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, upload.single('image'), (req, res) => {
   // get data from form and add to campgrounds array
   console.log(req.body);
   var name = req.body.name;
   var price = req.body.price;
-  var image = req.body.image;
+  // var image = req.body.image;
   var descrip = req.body.description;
   // Add username and id to the newly created campground
   var author = { id: req.user._id, username: req.user.username };
 
-  geocoder.geocode(req.body.location, function(err, data) {
+  geocoder.geocode(req.body.location, function (err, data) {
     if (err || !data.length) {
       req.flash("error", "Invalid address");
       return res.redirect("back");
@@ -59,31 +86,41 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     var lng = data[0].longitude;
     var location = data[0].formattedAddress;
 
-    var newCampground = {
-      name: name,
-      price: price,
-      image: image,
-      location: location,
-      lat: lat,
-      lng: lng,
-      description: descrip,
-      author: author
-    };
-    console.log("The user is", req.user);
-    // Adding to DB
-    Campground.create(newCampground, (err, newlyCreated) => {
-      if (err) {
-        console.log("Error adding a new campground", err);
-      } else {
-        // Check to see the user who created the campground
-        console.log(
-          "User who created the new campground:",
-          newlyCreated.author
-        );
-        // redirect back to campground
-        res.redirect("/campgrounds");
-      }
-    });
+    // Cloudinary
+    cloudinary.uploader.upload(req.file.path,
+      function (error, result) {
+        if (error) {
+          console.log(error.message);
+        }
+        // add cloudinary url for the image to the campground object under image property
+
+        var newCampground = {
+          name: name,
+          price: price,
+          image: result.secure_url,
+          location: location,
+          lat: lat,
+          lng: lng,
+          description: descrip,
+          author: author
+        };
+        console.log('result.secure_url : ' + result.secure_url)
+        console.log("The user is", req.user);
+        // Adding to DB
+        Campground.create(newCampground, (err, newlyCreated) => {
+          if (err) {
+            console.log("Error adding a new campground", err);
+          } else {
+            // Check to see the user who created the campground
+            console.log(
+              "User who created the new campground:",
+              newlyCreated.author
+            );
+            // redirect back to campground
+            res.redirect("/campgrounds/" + newlyCreated.id);
+          }
+        });
+      });
   });
 });
 
@@ -121,7 +158,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, (req, res) => {
   // find and update the correct campground
   console.log(req.body.campground);
   // Get geocoder location
-  geocoder.geocode(req.body.campground.location, function(err, data) {
+  geocoder.geocode(req.body.campground.location, function (err, data) {
     if (err || !data.length) {
       req.flash("error", "Address not found!");
       return res.redirect("back");
